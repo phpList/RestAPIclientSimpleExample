@@ -14,7 +14,7 @@ $password = 'admin1234';
 $base_uri = 'http://10.211.55.4:1994/app.php/api/v2';
 
 try {
-    $response = $client->request('POST', $base_uri.'/sessions', [
+    $response = $client->request('POST', $base_uri . '/sessions', [
         'form_params' => [
             'login_name' => $loginname,
             'password' => $password,
@@ -24,16 +24,18 @@ try {
 }
 
 //get session key
+
 if ($response->getBody()) {
+
     $obj = json_decode($response->getBody(), true);
     $key = $obj['key'];
-    echo 'Session key is: ' . $key.'<br><br>';
+    echo 'Session key is: ' . $key . '<br><br>';
 }
 
 //Use session key as password for basic auth
 $credentials = base64_encode($loginname . ':' . $key);
 
-$listInfo = $client->get($base_uri.'/lists/1',
+$listInfo = $client->get($base_uri . '/lists/1',
     [
         'headers' => [
             'Authorization' => 'Basic ' . $credentials,
@@ -42,17 +44,18 @@ $listInfo = $client->get($base_uri.'/lists/1',
     ]);
 
 if ($listInfo->getBody()) {
+
     $listInfoResponse = json_decode($listInfo->getBody(), true);
     echo 'List Info: <br><br>';
 
     foreach ($listInfoResponse as $key => $value) {
 
         echo "$key : $value<br>";
-        }
-        echo '<br>';
+    }
+    echo '<br>';
 }
 
-$members = $client->get($base_uri.'/lists/1/members',
+$members = $client->get($base_uri . '/lists/1/members',
     [
         'headers' => [
             'Authorization' => 'Basic ' . $credentials,
@@ -61,9 +64,10 @@ $members = $client->get($base_uri.'/lists/1/members',
     ]);
 
 if ($members->getBody()) {
+
     $membersResponse = json_decode($members->getBody(), true);
 
-    echo 'Subcsribers data of '.$listInfoResponse['name'].':<br><br>';
+    echo 'Subscribers of ' . $listInfoResponse['name'] . ':<br><br>';
 
     foreach ($membersResponse as $k => $val) {
         foreach ($val as $key => $value) {

@@ -30,7 +30,7 @@ if ($response->getBody()) {
     echo 'Session key is: ' . $key.'<br><br>';
 }
 
-
+//Use session key as password for basic auth
 $credentials = base64_encode($loginname . ':' . $key);
 
 $listInfo = $client->get($base_uri.'/lists/1',
@@ -72,6 +72,3 @@ if ($members->getBody()) {
         echo '<br>';
     }
 }
-
-
-

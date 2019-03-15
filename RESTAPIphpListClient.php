@@ -11,7 +11,7 @@ $client = new \GuzzleHttp\Client();
 //Please replace the following values with yours.
 $loginname = 'admin';
 $password = 'admin1234';
-$base_uri = 'http://10.211.55.4:1994/app.php/api/v2';
+$base_uri = 'http://10.211.55.4:81/lists/base/public/api/v2';
 
 try {
     $response = $client->request('POST', $base_uri . '/sessions', [

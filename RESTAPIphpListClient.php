@@ -1,6 +1,6 @@
 <?php
 /**
- * A very simple example of  Rest Api client of phpList
+ * A very simple example of  REST API client of phpList
  * @author Xheni Myrtaj
  **/
 
@@ -24,7 +24,6 @@ try {
 }
 
 //get session key
-
 if ($response->getBody()) {
 
     $obj = json_decode($response->getBody(), true);
@@ -35,6 +34,7 @@ if ($response->getBody()) {
 //Use session key as password for basic auth
 $credentials = base64_encode($loginname . ':' . $key);
 
+// Get list info  where id=1
 $listInfo = $client->get($base_uri . '/lists/1',
     [
         'headers' => [
@@ -46,6 +46,7 @@ $listInfo = $client->get($base_uri . '/lists/1',
 if ($listInfo->getBody()) {
 
     $listInfoResponse = json_decode($listInfo->getBody(), true);
+
     echo 'List Info: <br><br>';
 
     foreach ($listInfoResponse as $key => $value) {
@@ -55,6 +56,7 @@ if ($listInfo->getBody()) {
     echo '<br>';
 }
 
+//Get all subscribers where list id=1
 $members = $client->get($base_uri . '/lists/1/members',
     [
         'headers' => [
@@ -76,3 +78,24 @@ if ($members->getBody()) {
         echo '<br>';
     }
 }
+
+// Add a new subscriber
+try {
+    $subscriberRequest = $client->request('POST', $base_uri . '/subscribers',
+        [
+            'headers' => [
+                'Authorization' => 'Basic ' . $credentials,
+                'Content-Type' => 'application/json',
+            ],
+            'json' => [
+                'email' => 'restapi@example.com',
+                'confirmed' => true,
+                'blacklisted' => false,
+                'html_email' => true,
+                'disabled' => false,
+            ],
+        ]
+    );
+} catch (\GuzzleHttp\Exception\GuzzleException $e) {
+}
+$subscriberRequest->getBody();
